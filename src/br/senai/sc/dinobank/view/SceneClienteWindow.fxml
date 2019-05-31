@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="498.0" prefWidth="543.0" stylesheets="@../resources/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.senai.sc.dinobank.controller.SceneClienteWindowController">
+   <children>
+      <Button fx:id="btnNovoCliente" layoutX="24.0" layoutY="24.0" mnemonicParsing="false" onAction="#btnNovoClienteOnAction" prefHeight="32.0" prefWidth="111.0" styleClass="primary" text="Novo Cliente" />
+      <TextField fx:id="txtCodigo" editable="false" layoutX="24.0" layoutY="71.0" prefHeight="25.0" prefWidth="62.0" promptText="Código" style="-fx-background-color: lightgreen;" />
+      <TextField fx:id="txtNome" layoutX="103.0" layoutY="71.0" prefWidth="182.0" promptText="Nome Completo" />
+      <TextField fx:id="txtTelefone" layoutX="297.0" layoutY="71.0" prefWidth="170.0" promptText="Telefone" />
+      <TextField fx:id="txtCpf" layoutX="25.0" layoutY="117.0" prefWidth="163.0" promptText="CPF" />
+      <TextField fx:id="txtIdade" layoutX="202.0" layoutY="117.0" prefHeight="25.0" prefWidth="50.0" promptText="Idade" />
+      <TextField fx:id="txtFiltro" layoutX="145.0" layoutY="224.0" prefWidth="170.0" promptText="Filtrar" />
+      <Button fx:id="btnSalvarCliente" layoutX="25.0" layoutY="164.0" mnemonicParsing="false" onAction="#btnSalvarClienteOnAction" prefHeight="29.0" prefWidth="62.0" styleClass="success" text="Salvar" />
+      <Button fx:id="btnExcluirCliente" layoutX="95.0" layoutY="164.0" mnemonicParsing="false" onAction="#btnExcluirClienteOnAction" prefHeight="29.0" prefWidth="62.0" styleClass="danger" text="Excluir" />
+      <Button fx:id="btnCarregar" layoutX="323.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnCarregarOnAction" styleClass="info" text="Carregar" />
+      <TableView fx:id="tableClientes" layoutX="25.0" layoutY="272.0" prefHeight="200.0" prefWidth="493.0">
+        <columns>
+             <TableColumn prefWidth="174.0" text="Nome">
+                <cellValueFactory>
+                    <PropertyValueFactory property="nome" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn minWidth="0.0" prefWidth="121.0" text="Telefone">
+                <cellValueFactory>
+                     <PropertyValueFactory property="telefone" />
+                 </cellValueFactory>
+             </TableColumn>
+            <TableColumn prefWidth="143.0" text="CPF">
+                <cellValueFactory>
+                    <PropertyValueFactory property="cpf" />
+                </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="54.0" text="Idade">
+                <cellValueFactory>
+                    <PropertyValueFactory property="idade" />
+                 </cellValueFactory>
+            </TableColumn>
+        </columns>
+      </TableView>
+      <Separator layoutX="15.0" layoutY="204.0" prefHeight="13.0" prefWidth="514.0" />
+   </children>
+</AnchorPane>
