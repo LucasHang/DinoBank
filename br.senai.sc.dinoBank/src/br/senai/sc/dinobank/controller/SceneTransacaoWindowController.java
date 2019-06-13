@@ -68,12 +68,23 @@ public class SceneTransacaoWindowController implements Initializable {
     
     Boolean invalido = null;
     
-    List<String> acoes = Arrays.asList("Deposíto", "Saque", "Transferência");
+    List<String> acoes = Arrays.asList("Depósíto", "Saque", "Transferência");
     
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            btnCarregarOnAction(null);
+        } catch (SQLException ex) {
+            Logger.getLogger(SceneTransacaoWindowController.class.getName()).log(Level.SEVERE, null, ex);
+            alerta.alertaDeErro(ex.getMessage());
+        }
         
+        tblTransacoes.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newValue)->{
+            unbindFields(oldValue);
+            bindFields(newValue);
+            transacaoSelecionada = newValue;
+        });
         comboAcao.setItems(FXCollections.observableArrayList(acoes));
     }    
 
@@ -89,7 +100,9 @@ public class SceneTransacaoWindowController implements Initializable {
     }
 
     @FXML
-    private void btnCarregarOnAction(ActionEvent event) {
+    private void btnCarregarOnAction(ActionEvent event) throws SQLException {
+        tblTransacoes.setItems(FXCollections.observableArrayList(DAOFactory.getTransacaoDAO().getAll()));
+        
     }
     
     @FXML
@@ -114,14 +127,17 @@ public class SceneTransacaoWindowController implements Initializable {
         unbindFields(transacaoSelecionada);
         try {
             if (novaTransacao != null) {
+                DAOFactory.getContaDAO().updateTransacao(novaTransacao.getNumContaOrigem(), novaTransacao.getNumContaOrigem(), 
+                        novaTransacao.getValor(), novaTransacao.getAcao());
+                
                 novaTransacao.setData(pegaData());
                 DAOFactory.getTransacaoDAO().save(novaTransacao);
                 novaTransacao = null;
-            } else {
+            }/* else {
                 transacaoSelecionada.setData(pegaData());
                 DAOFactory.getTransacaoDAO().update(transacaoSelecionada);
                 
-            }
+            }*/
             limparFields();
         } catch (SQLException ex) {
             Logger.getLogger(SceneClienteWindowController.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,7 +151,7 @@ public class SceneTransacaoWindowController implements Initializable {
             txtContaDestino.textProperty().bindBidirectional(transacao.numContaDestinoProperty());
         }
         txtValor.textProperty().bindBidirectional(transacao.valorProperty(), new NumberStringConverter());
-        comboAcao.accessibleTextProperty().bindBidirectional(transacao.acaoProperty());
+        comboAcao.valueProperty().bindBidirectional(transacao.acaoProperty());
         
     }
 
@@ -145,7 +161,7 @@ public class SceneTransacaoWindowController implements Initializable {
             txtContaDestino.textProperty().unbindBidirectional(transacao.numContaDestinoProperty());
         }
         txtValor.textProperty().unbindBidirectional(transacao.valorProperty());
-        comboAcao.accessibleTextProperty().unbindBidirectional(transacao.acaoProperty());
+        comboAcao.valueProperty().unbindBidirectional(transacao.acaoProperty());
     }
     
     private Boolean acaoTransferencia(){
@@ -159,11 +175,11 @@ public class SceneTransacaoWindowController implements Initializable {
         return false;
     }
     
-    private Integer pegaData(){
-        Integer data = null;
+    private String pegaData(){
+        String data = null;
         Date date = new Date();
-        SimpleDateFormat dataFormat = new SimpleDateFormat();
-        data = parseInt(dataFormat.format(date));
+        SimpleDateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy");
+        data = dataFormat.format(date);
         return data;
     }
     
@@ -196,7 +212,7 @@ public class SceneTransacaoWindowController implements Initializable {
         }else{
             txtContaDestino.getStyleClass().remove("no-validation");
         }
-        if(comboAcao.accessibleTextProperty().isNull().get()){
+        if(comboAcao.valueProperty().isNull().get()){
             comboAcao.getStyleClass().add("no-validation");
             invalido = true;
         }else{

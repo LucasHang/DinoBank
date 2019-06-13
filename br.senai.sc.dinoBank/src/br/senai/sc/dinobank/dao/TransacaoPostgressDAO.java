@@ -27,7 +27,7 @@ public class TransacaoPostgressDAO extends ConnectionFactory implements Transaca
         super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(transacao.getNumContaDestino()).getCodigo());
         super.prepared.setString(3, transacao.getAcao());
         super.prepared.setDouble(4, transacao.getValor());
-        super.prepared.setInt(5, transacao.getData());
+        super.prepared.setString(5, transacao.getData());
         int linhasAfetadas = super.prepared.executeUpdate();
         if (linhasAfetadas == 0){
             throw new SQLException("Não foi possível cadastrar a transaçao");
@@ -49,7 +49,7 @@ public class TransacaoPostgressDAO extends ConnectionFactory implements Transaca
         super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(transacao.getNumContaDestino()).getCodigo());
         super.prepared.setString(3, transacao.getAcao());
         super.prepared.setDouble(4, transacao.getValor());
-        super.prepared.setInt(5, transacao.getData());
+        super.prepared.setString(5, transacao.getData());
         super.prepared.setInt(6, transacao.getCodigo());
         int linhasAfetadas = super.prepared.executeUpdate();
         if (linhasAfetadas == 0){
@@ -83,7 +83,7 @@ public class TransacaoPostgressDAO extends ConnectionFactory implements Transaca
                     DAOFactory.getContaDAO().getContaByCodigo(resultSetRows.getInt("codContaDestino")).getConta(),
                     resultSetRows.getString("acao"),
                     resultSetRows.getDouble("valor"),
-                    resultSetRows.getInt("dataTrans")));
+                    resultSetRows.getString("dataTrans")));
         }
         resultSetRows.close();
         super.closePreparedStatement();
@@ -104,7 +104,7 @@ public class TransacaoPostgressDAO extends ConnectionFactory implements Transaca
                     DAOFactory.getContaDAO().getContaByCodigo(resultSetRows.getInt("codContaDestino")).getConta(),
                     resultSetRows.getString("acao"),
                     resultSetRows.getDouble("valor"),
-                    resultSetRows.getInt("dataTrans")));
+                    resultSetRows.getString("dataTrans")));
         }
         resultSetRows.close();
         super.closePreparedStatement();
@@ -125,7 +125,7 @@ public class TransacaoPostgressDAO extends ConnectionFactory implements Transaca
                     DAOFactory.getContaDAO().getContaByCodigo(resultSetRows.getInt("codContaDestino")).getConta(),
                     resultSetRows.getString("acao"),
                     resultSetRows.getDouble("valor"),
-                    resultSetRows.getInt("dataTrans"));
+                    resultSetRows.getString("dataTrans"));
         }
         resultSetRows.close();
         super.closePreparedStatement();

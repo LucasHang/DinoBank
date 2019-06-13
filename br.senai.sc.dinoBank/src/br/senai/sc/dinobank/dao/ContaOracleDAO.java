@@ -1,6 +1,5 @@
 package br.senai.sc.dinobank.dao;
 
-import br.senai.sc.dinobank.BancoDeDados;
 import br.senai.sc.dinobank.model.Conta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,10 +19,10 @@ public class ContaOracleDAO extends ConnectionFactory implements ContaDAO {
         super.prepared.setString(3, conta.getTitular());
         super.prepared.setDouble(4, conta.getSaldo());
         int linhasAfetadas = super.prepared.executeUpdate();
-        if (linhasAfetadas == 0){
+        if (linhasAfetadas == 0) {
             throw new SQLException("Não foi possível cadastrar a nova conta");
         }
-        
+
         ResultSet resultSetRows = super.prepared.getGeneratedKeys();
         if (resultSetRows.next()) {
             conta.setCodigo(resultSetRows.getInt("codigo"));
@@ -42,10 +41,10 @@ public class ContaOracleDAO extends ConnectionFactory implements ContaDAO {
         super.prepared.setDouble(4, conta.getSaldo());
         super.prepared.setInt(5, conta.getCodigo());
         int linhasAfetadas = super.prepared.executeUpdate();
-        if (linhasAfetadas == 0){
+        if (linhasAfetadas == 0) {
             throw new SQLException("Não foi possível aletrar a conta");
         }
-        
+
         super.closePreparedStatement();
     }
 
@@ -55,10 +54,10 @@ public class ContaOracleDAO extends ConnectionFactory implements ContaDAO {
                 "delete from conta where codigo = ?");
         super.prepared.setInt(1, conta.getCodigo());
         int linhasAfetadas = super.prepared.executeUpdate();
-        if (linhasAfetadas == 0){
+        if (linhasAfetadas == 0) {
             throw new SQLException("Não foi possível deletar a conta");
         }
-        
+
         super.closePreparedStatement();
     }
 
@@ -126,7 +125,7 @@ public class ContaOracleDAO extends ConnectionFactory implements ContaDAO {
     public List<Conta> getContaByTitular(String titular) throws SQLException {
         List<Conta> rows = new ArrayList<>();
         super.preparedStatementInitialize("select * from conta where upper(titular) like ?");
-        super.prepared.setString(1, "%"+titular.toUpperCase()+"%");
+        super.prepared.setString(1, "%" + titular.toUpperCase() + "%");
         super.prepared.execute();
         ResultSet resultSetRows = super.prepared.getResultSet();
         while (resultSetRows.next()) {
@@ -162,4 +161,53 @@ public class ContaOracleDAO extends ConnectionFactory implements ContaDAO {
         return novaConta;
     }
 
-}
+    @Override
+    public void updateTransacao(String contaOrigem, String contaDestino, Double valor, String acao) throws SQLException {
+        int linhasAfetadas;
+
+        super.preparedStatementInitialize(
+                "update conta set saldo = ? where codigo = ?");
+        switch (acao) {
+            case "Depósito":
+                super.prepared.setDouble(1, DAOFactory.getContaDAO().getContaByNumero(contaOrigem).getSaldo() + valor);
+                super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(contaOrigem).getCodigo());
+                linhasAfetadas = super.prepared.executeUpdate();
+                if (linhasAfetadas == 0) {
+                    throw new SQLException("Não foi possível alterar a conta");
+                }
+                super.closePreparedStatement();
+            break;
+                
+            case "Saque":
+                super.prepared.setDouble(1, DAOFactory.getContaDAO().getContaByNumero(contaOrigem).getSaldo() - valor);
+                super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(contaOrigem).getCodigo());
+                linhasAfetadas = super.prepared.executeUpdate();
+                if (linhasAfetadas == 0) {
+                    throw new SQLException("Não foi possível alterar a conta");
+                }
+                super.closePreparedStatement();
+            break;
+            
+            case "Transferência":
+                super.prepared.setDouble(1, DAOFactory.getContaDAO().getContaByNumero(contaOrigem).getSaldo() - valor);
+                super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(contaOrigem).getCodigo());
+                linhasAfetadas = super.prepared.executeUpdate();
+                if (linhasAfetadas == 0) {
+                    throw new SQLException("Não foi possível alterar a conta");
+                }
+                super.closePreparedStatement();
+                
+                super.preparedStatementInitialize(
+                        "update conta set saldo = ? where codigo = ?");
+                super.prepared.setDouble(1, DAOFactory.getContaDAO().getContaByNumero(contaDestino).getSaldo() + valor);
+                super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(contaDestino).getCodigo());
+                linhasAfetadas = super.prepared.executeUpdate();
+                if (linhasAfetadas == 0) {
+                    throw new SQLException("Não foi possível alterar a conta");
+                }
+                super.closePreparedStatement();
+            break;
+    
+        }
+       }
+    }

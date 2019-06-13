@@ -24,7 +24,7 @@ public class Transacao {
     private final StringProperty numContaOrigem = new SimpleStringProperty();
     private final StringProperty acao = new SimpleStringProperty();
     private final DoubleProperty valor = new SimpleDoubleProperty();
-    private final IntegerProperty data = new SimpleIntegerProperty();
+    private final StringProperty data = new SimpleStringProperty();
     private final IntegerProperty codigo = new SimpleIntegerProperty();
    
     
@@ -33,7 +33,7 @@ public class Transacao {
         
     }
     
-    public Transacao(Integer codigo,String conta1,String conta2,String acao,Double valor,Integer data){
+    public Transacao(Integer codigo,String conta1,String conta2,String acao,Double valor,String data){
         this.codigo.set(codigo);
         this.numContaOrigem.set(conta1);
         this.numContaDestino.set(conta2);
@@ -104,15 +104,15 @@ public class Transacao {
         return this.valor;
     }
     
-    public Integer getData() {
+    public String getData() {
         return this.data.get();
     }
 
-    public void setData(Integer value) {
+    public void setData(String value) {
         this.data.set(value);
     }
 
-    public IntegerProperty dataProperty() {
+    public StringProperty dataProperty() {
         return this.data;
     }
     

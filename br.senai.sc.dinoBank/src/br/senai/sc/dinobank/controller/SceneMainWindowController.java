@@ -65,7 +65,6 @@ public class SceneMainWindowController implements Initializable {
            
                 FXMLLoader cargaDoScene =
                        new FXMLLoader(getClass().getResource("/br/senai/sc/dinobank/view/SceneContaWindow.fxml"));
-           // }
             if(abaConta == null){
                 abaConta = new Tab("Cadastro de Contas");
             }
@@ -96,10 +95,9 @@ public class SceneMainWindowController implements Initializable {
     @FXML
     private void menuCadastrosCadastroClientesOnAction(ActionEvent event) {
          try {
-             //if(cargaDoSceneCliente == null){
             FXMLLoader cargaDoScene =
                     new FXMLLoader(getClass().getResource("/br/senai/sc/dinobank/view/SceneClienteWindow.fxml"));
-             //}
+
             if(abaCliente == null){
             abaCliente = new Tab("Cadastro de Clientes");
             }
@@ -149,7 +147,7 @@ public class SceneMainWindowController implements Initializable {
            
                 FXMLLoader cargaDoScene =
                        new FXMLLoader(getClass().getResource("/br/senai/sc/dinobank/view/SceneTransacaoWindow.fxml"));
-           // }
+                
             if(abaTransacao == null){
                 abaTransacao = new Tab("Transacao");
             }
