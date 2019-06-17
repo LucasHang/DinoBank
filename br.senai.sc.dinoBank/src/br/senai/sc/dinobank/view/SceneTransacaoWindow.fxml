@@ -10,10 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="498.0" prefWidth="543.0" stylesheets="@../resources/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.senai.sc.dinobank.controller.SceneTransacaoWindowController">
+<AnchorPane id="AnchorPane" prefHeight="498.0" prefWidth="543.0" stylesheets="@../resources/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.senai.sc.dinobank.controller.SceneTransacaoWindowController">
    <children>
-      <Button fx:id="btnNovaTransacao" layoutX="196.0" layoutY="31.0" mnemonicParsing="false" onAction="#btnNovaTransacaoOnAction" styleClass="primary" text="Nova Transação" />
-      <ComboBox fx:id="comboAcao" layoutX="31.0" layoutY="31.0" onAction="#comboAcaoOnAction" prefWidth="150.0" promptText="Ação" />
+      <ComboBox fx:id="comboAcao" disable="true" layoutX="31.0" layoutY="31.0" onAction="#comboAcaoOnAction" prefWidth="160.0" promptText="Ação" />
       <TableView fx:id="tblTransacoes" layoutX="14.0" layoutY="260.0" prefHeight="224.0" prefWidth="516.0">
         <columns>
           <TableColumn prefWidth="98.0" text="Nº Conta&#10;Origem">
@@ -43,9 +42,9 @@
             </TableColumn>
         </columns>
       </TableView>
-      <TextField fx:id="txtContaOrigem" layoutX="31.0" layoutY="118.0" promptText="Número da Conta" />
+      <TextField fx:id="txtContaOrigem" disable="true" layoutX="31.0" layoutY="118.0" promptText="Número da Conta" />
       <TextField fx:id="txtContaDestino" layoutX="362.0" layoutY="118.0" promptText="Número da Conta" visible="false" />
-      <TextField fx:id="txtValor" layoutX="222.0" layoutY="118.0" prefHeight="25.0" prefWidth="109.0" promptText="Valor" />
+      <TextField fx:id="txtValor" disable="true" layoutX="222.0" layoutY="118.0" prefHeight="25.0" prefWidth="109.0" promptText="Valor" />
       <Button fx:id="btnCarregar" layoutX="319.0" layoutY="216.0" mnemonicParsing="false" onAction="#btnCarregarOnAction" styleClass="info" text="Carregar" />
       <TextField fx:id="txtCarregar" layoutX="164.0" layoutY="216.0" promptText="Filtrar" />
       <Label layoutX="66.0" layoutY="97.0" text="Conta Origem">
@@ -59,5 +58,6 @@
          </font>
       </Label>
       <Button fx:id="btnExecutar" layoutX="34.0" layoutY="173.0" mnemonicParsing="false" onAction="#btnExecutarOnAction" styleClass="success" text="Executar" />
+      <Button layoutX="204.0" layoutY="31.0" mnemonicParsing="false" onAction="#btnNovaTransacaoOnAction" prefHeight="32.0" prefWidth="141.0" text="Nova Transação" />
    </children>
 </AnchorPane>

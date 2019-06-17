@@ -7,6 +7,7 @@ package br.senai.sc.dinobank.dao;
 
 import br.senai.sc.dinobank.model.Transacao;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -15,9 +16,9 @@ import java.util.List;
  */
 public interface TransacaoDAO {
     
-    public void save(Transacao cliente) throws SQLException;
+    public void save(Transacao cliente) throws SQLException,ParseException;
 
-    public void update(Transacao cliente) throws SQLException;
+    public void update(Transacao cliente) throws SQLException,ParseException;
 
     public void delete(Transacao cliente) throws SQLException;
 

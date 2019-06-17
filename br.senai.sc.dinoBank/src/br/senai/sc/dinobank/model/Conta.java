@@ -29,7 +29,7 @@ public class Conta {
         this.conta.set(numero);
         this.agencia.set(agencia);
         this.titular.set(titular);
-        this.saldo.set(saldo + 100.0);
+        this.saldo.set(saldo);
     }
     
     public String getAgecia() {

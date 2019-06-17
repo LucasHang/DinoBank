@@ -10,7 +10,11 @@ public interface ContaDAO {
 
     public void update(Conta conta) throws SQLException;
     
-    public void updateTransacao(String contaOrigem,String contaDestino,Double valor,String acao) throws SQLException;
+    public void updateDeposito(String contaOrigem,Double valor) throws SQLException;
+    
+    public void updateSaque(String contaOrigem,Double valor) throws SQLException;
+    
+    public void updateTransferencia(String contaOrigem,String contaDestino,Double valor) throws SQLException;
 
     public void delete(Conta conta) throws SQLException;
 

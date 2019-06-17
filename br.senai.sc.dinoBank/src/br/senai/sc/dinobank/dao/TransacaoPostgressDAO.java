@@ -8,17 +8,26 @@ package br.senai.sc.dinobank.dao;
 import br.senai.sc.dinobank.model.Transacao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javafx.scene.input.DataFormat;
 
 /**
  *
  * @author Senai
  */
 public class TransacaoPostgressDAO extends ConnectionFactory implements TransacaoDAO {
+    
+    DateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy");
+    java.sql.Date sqlDate;
+    
 
     @Override
-    public void save(Transacao transacao) throws SQLException {
+    public void save(Transacao transacao) throws SQLException, ParseException {
         String[] codigoGerado = {"codigo"};
         super.preparedStatementInitialize(
                 "insert into transacao (codContaOrigem, codContaDestino, acao, valor, dataTrans) values (?,?,?,?,?)",
@@ -27,7 +36,8 @@ public class TransacaoPostgressDAO extends ConnectionFactory implements Transaca
         super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(transacao.getNumContaDestino()).getCodigo());
         super.prepared.setString(3, transacao.getAcao());
         super.prepared.setDouble(4, transacao.getValor());
-        super.prepared.setString(5, transacao.getData());
+        sqlDate = new java.sql.Date(dataFormat.parse(transacao.getData()).getTime());
+        super.prepared.setDate(5, sqlDate);
         int linhasAfetadas = super.prepared.executeUpdate();
         if (linhasAfetadas == 0){
             throw new SQLException("Não foi possível cadastrar a transaçao");
@@ -42,14 +52,15 @@ public class TransacaoPostgressDAO extends ConnectionFactory implements Transaca
     }
 
     @Override
-    public void update(Transacao transacao) throws SQLException {
+    public void update(Transacao transacao) throws SQLException,ParseException {
         super.preparedStatementInitialize(
                 "update transacao  codContaOrigem = ?,codContaDestino = ?, acao = ?, valor = ?, dataTrans = ? where codigo = ?");
         super.prepared.setInt(1, DAOFactory.getContaDAO().getContaByNumero(transacao.getNumContaOrigem()).getCodigo());
         super.prepared.setInt(2, DAOFactory.getContaDAO().getContaByNumero(transacao.getNumContaDestino()).getCodigo());
         super.prepared.setString(3, transacao.getAcao());
         super.prepared.setDouble(4, transacao.getValor());
-        super.prepared.setString(5, transacao.getData());
+        sqlDate = new java.sql.Date(dataFormat.parse(transacao.getData()).getTime());
+        super.prepared.setDate(5, sqlDate);
         super.prepared.setInt(6, transacao.getCodigo());
         int linhasAfetadas = super.prepared.executeUpdate();
         if (linhasAfetadas == 0){

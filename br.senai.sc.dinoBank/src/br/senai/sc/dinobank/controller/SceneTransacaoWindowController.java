@@ -12,6 +12,7 @@ import br.senai.sc.dinobank.model.Transacao;
 import static java.lang.Integer.parseInt;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -40,8 +41,6 @@ import javafx.util.converter.NumberStringConverter;
 public class SceneTransacaoWindowController implements Initializable {
 
     @FXML
-    private Button btnNovaTransacao;
-    @FXML
     private ComboBox<String> comboAcao;
     @FXML
     private TableView<Transacao> tblTransacoes;
@@ -66,13 +65,14 @@ public class SceneTransacaoWindowController implements Initializable {
     
     MeuAlerta alerta = new MeuAlerta();
     
-    Boolean invalido = null;
+    Boolean invalido;
     
     List<String> acoes = Arrays.asList("Depósíto", "Saque", "Transferência");
     
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         try {
             btnCarregarOnAction(null);
         } catch (SQLException ex) {
@@ -80,24 +80,14 @@ public class SceneTransacaoWindowController implements Initializable {
             alerta.alertaDeErro(ex.getMessage());
         }
         
-        tblTransacoes.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newValue)->{
+        /*tblTransacoes.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newValue)->{
             unbindFields(oldValue);
             bindFields(newValue);
             transacaoSelecionada = newValue;
-        });
+        });*/
         comboAcao.setItems(FXCollections.observableArrayList(acoes));
     }    
 
-    @FXML
-    private void btnNovaTransacaoOnAction(ActionEvent event) {
-        
-        if(novaTransacao == null){
-            unbindFields(transacaoSelecionada);
-            novaTransacao = new Transacao();
-            tblTransacoes.getItems().add(novaTransacao);
-            bindFields(novaTransacao);
-        }
-    }
 
     @FXML
     private void btnCarregarOnAction(ActionEvent event) throws SQLException {
@@ -107,8 +97,24 @@ public class SceneTransacaoWindowController implements Initializable {
     
     @FXML
     private void comboAcaoOnAction(ActionEvent event) {
-        acaoTransferencia();
+        if(acaoTransferencia()){
+            txtContaDestino.textProperty().bindBidirectional(novaTransacao.numContaDestinoProperty());
+        }
+  
+        }
+
+
+    @FXML
+    private void btnNovaTransacaoOnAction(ActionEvent event) {
+        if(novaTransacao == null){
+    //          unbindFields(transacaoSelecionada);
+            allowFields();
+                novaTransacao = new Transacao();
+                tblTransacoes.getItems().add(novaTransacao);
+                bindFields(novaTransacao);
+            }
     }
+        
 
     @FXML
     private void btnExecutarOnAction(ActionEvent event) {
@@ -122,16 +128,32 @@ public class SceneTransacaoWindowController implements Initializable {
         txtContaDestino.getStyleClass().remove("no-validation");
         comboAcao.getStyleClass().remove("no-validation");
         
+        
 
         unbindFields(novaTransacao);
-        unbindFields(transacaoSelecionada);
+        
+       // unbindFields(transacaoSelecionada);
         try {
             if (novaTransacao != null) {
-                DAOFactory.getContaDAO().updateTransacao(novaTransacao.getNumContaOrigem(), novaTransacao.getNumContaOrigem(), 
-                        novaTransacao.getValor(), novaTransacao.getAcao());
                 
+                if(novaTransacao.getNumContaDestino() == null){
+                    novaTransacao.setNumContaDestino(novaTransacao.getNumContaOrigem());
+                }
                 novaTransacao.setData(pegaData());
                 DAOFactory.getTransacaoDAO().save(novaTransacao);
+                
+                //switch(novaTransacao.getAcao()){
+                    //case "Depósito":
+                       // DAOFactory.getContaDAO().updateDeposito(novaTransacao.getNumContaOrigem(),novaTransacao.getValor());
+                  //  break;
+                   // case "Saque":
+                   //     DAOFactory.getContaDAO().updateSaque(novaTransacao.getNumContaOrigem(),novaTransacao.getValor());
+                  //  break;
+                  //  case "Transferência":
+                        DAOFactory.getContaDAO().updateTransferencia(novaTransacao.getNumContaOrigem(),novaTransacao.getNumContaDestino(),novaTransacao.getValor());
+                 //   break;
+                //}
+                
                 novaTransacao = null;
             }/* else {
                 transacaoSelecionada.setData(pegaData());
@@ -142,36 +164,43 @@ public class SceneTransacaoWindowController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(SceneClienteWindowController.class.getName()).log(Level.SEVERE, null, ex);
             alerta.alertaDeErro(ex.getMessage()).showAndWait();
+        } catch (ParseException ex) {
+            Logger.getLogger(SceneTransacaoWindowController.class.getName()).log(Level.SEVERE, null, ex);
+            alerta.alertaDeErro(ex.getMessage()).showAndWait();
         }
     }
     
     private void bindFields(Transacao transacao){
         txtContaOrigem.textProperty().bindBidirectional(transacao.numContaOrigemProperty());
+        txtValor.textProperty().bindBidirectional(transacao.valorProperty(), new NumberStringConverter());
+        comboAcao.valueProperty().bindBidirectional(transacao.acaoProperty());
         if(acaoTransferencia()){
             txtContaDestino.textProperty().bindBidirectional(transacao.numContaDestinoProperty());
         }
-        txtValor.textProperty().bindBidirectional(transacao.valorProperty(), new NumberStringConverter());
-        comboAcao.valueProperty().bindBidirectional(transacao.acaoProperty());
         
     }
 
     private void unbindFields(Transacao transacao){
         txtContaOrigem.textProperty().unbindBidirectional(transacao.numContaOrigemProperty());
+        txtValor.textProperty().unbindBidirectional(transacao.valorProperty());
+        comboAcao.valueProperty().unbindBidirectional(transacao.acaoProperty());
         if(acaoTransferencia()){
             txtContaDestino.textProperty().unbindBidirectional(transacao.numContaDestinoProperty());
         }
-        txtValor.textProperty().unbindBidirectional(transacao.valorProperty());
-        comboAcao.valueProperty().unbindBidirectional(transacao.acaoProperty());
+        
     }
     
     private Boolean acaoTransferencia(){
-        if(comboAcao.getValue().equals("Transferência")){
-            txtContaDestino.setVisible(true);
-            labelContaDestino.setVisible(true);
-            return true;
+        if(comboAcao.getValue() != null){
+            if(comboAcao.getValue().equalsIgnoreCase("Transferência")){
+                 txtContaDestino.setVisible(true);
+                 labelContaDestino.setVisible(true);
+                 return true;
+             }
+            txtContaDestino.setVisible(false);
+            labelContaDestino.setVisible(false);
+            return false;
         }
-        txtContaDestino.setVisible(false);
-        labelContaDestino.setVisible(false);
         return false;
     }
     
@@ -220,5 +249,11 @@ public class SceneTransacaoWindowController implements Initializable {
         }
           
         return invalido;
+    }
+    
+    private void allowFields(){
+        txtContaOrigem.setDisable(false);
+        txtValor.setDisable(false);
+        comboAcao.setDisable(false);
     }
 }
