@@ -29,6 +29,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.util.converter.NumberStringConverter;
@@ -58,7 +60,9 @@ public class SceneTransacaoWindowController implements Initializable {
     private Label labelContaDestino;
     @FXML
     private Button btnExecutar;
-
+    @FXML
+    private TableColumn<Transacao, String> tblColumnData;
+    
     
     Transacao transacaoSelecionada = null;
     Transacao novaTransacao = null;
@@ -68,6 +72,7 @@ public class SceneTransacaoWindowController implements Initializable {
     Boolean invalido;
     
     List<String> acoes = Arrays.asList("Depósíto", "Saque", "Transferência");
+    
     
 
     @Override
@@ -79,6 +84,43 @@ public class SceneTransacaoWindowController implements Initializable {
             Logger.getLogger(SceneTransacaoWindowController.class.getName()).log(Level.SEVERE, null, ex);
             alerta.alertaDeErro(ex.getMessage());
         }
+        
+        tblColumnData.setCellFactory((TableColumn<Transacao, String> param) -> {
+            TableCell cell = new TableCell<Transacao, String>() {
+
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+                    if (!empty) {
+                        if (item == null || item.isEmpty()) {
+                            setText("");
+                        } else {
+                            String dataString = "";
+                            List<String> aux = Arrays.asList(item.split("-"));
+                            dataString = dataString.concat(aux.get(2));
+                            dataString = dataString.concat("/");
+                            dataString = dataString.concat(aux.get(1));
+                            dataString = dataString.concat("/");
+                            dataString = dataString.concat(aux.get(0));
+                            setText(dataString);
+                        }
+
+                    }
+                }
+
+                @Override
+                public void updateSelected(boolean upd) {
+                    super.updateSelected(upd);
+                }
+
+                private String getString() {
+                    return getItem() == null ? "" : getItem().toString();
+                }
+            };
+            return cell;
+        });
         
         /*tblTransacoes.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newValue)->{
             unbindFields(oldValue);

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="498.0" prefWidth="543.0" stylesheets="@../resources/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.senai.sc.dinobank.controller.SceneTransacaoWindowController">
+<AnchorPane id="AnchorPane" prefHeight="498.0" prefWidth="543.0" stylesheets="@../resources/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.senai.sc.dinobank.controller.SceneTransacaoWindowController">
    <children>
       <ComboBox fx:id="comboAcao" disable="true" layoutX="31.0" layoutY="31.0" onAction="#comboAcaoOnAction" prefWidth="160.0" promptText="Ação" />
       <TableView fx:id="tblTransacoes" layoutX="14.0" layoutY="260.0" prefHeight="224.0" prefWidth="516.0">
@@ -35,7 +35,7 @@
                     <PropertyValueFactory property="numContaDestino" />
                 </cellValueFactory>
             </TableColumn>
-            <TableColumn prefWidth="82.0" text="Data">
+            <TableColumn fx:id="tblColumnData" prefWidth="82.0" text="Data">
               <cellValueFactory>
                     <PropertyValueFactory property="data" />
               </cellValueFactory>
