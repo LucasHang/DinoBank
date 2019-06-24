@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="498.0" prefWidth="543.0" stylesheets="@../resources/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.senai.sc.dinobank.controller.SceneTransacaoWindowController">
+<AnchorPane id="AnchorPane" prefHeight="498.0" prefWidth="543.0" stylesheets="@../resources/styles/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.senai.sc.dinobank.controller.SceneTransacaoWindowController">
    <children>
-      <ComboBox fx:id="comboAcao" disable="true" layoutX="31.0" layoutY="31.0" onAction="#comboAcaoOnAction" prefWidth="160.0" promptText="Ação" />
+      <ComboBox fx:id="comboAcao" disable="true" layoutX="31.0" layoutY="25.0" onAction="#comboAcaoOnAction" prefWidth="160.0" promptText="Ação" />
       <TableView fx:id="tblTransacoes" layoutX="14.0" layoutY="260.0" prefHeight="224.0" prefWidth="516.0">
         <columns>
           <TableColumn prefWidth="98.0" text="Nº Conta&#10;Origem">
@@ -42,22 +42,22 @@
             </TableColumn>
         </columns>
       </TableView>
-      <TextField fx:id="txtContaOrigem" disable="true" layoutX="31.0" layoutY="118.0" promptText="Número da Conta" />
-      <TextField fx:id="txtContaDestino" layoutX="362.0" layoutY="118.0" promptText="Número da Conta" visible="false" />
-      <TextField fx:id="txtValor" disable="true" layoutX="222.0" layoutY="118.0" prefHeight="25.0" prefWidth="109.0" promptText="Valor" />
+      <TextField fx:id="txtContaOrigem" disable="true" layoutX="31.0" layoutY="109.0" promptText="Número da Conta" />
+      <TextField fx:id="txtContaDestino" layoutX="362.0" layoutY="109.0" promptText="Número da Conta" visible="false" />
+      <TextField fx:id="txtValor" disable="true" layoutX="220.0" layoutY="109.0" prefHeight="25.0" prefWidth="109.0" promptText="Valor" />
       <Button fx:id="btnCarregar" layoutX="319.0" layoutY="216.0" mnemonicParsing="false" onAction="#btnCarregarOnAction" styleClass="info" text="Carregar" />
       <TextField fx:id="txtCarregar" layoutX="164.0" layoutY="216.0" promptText="Filtrar" />
-      <Label layoutX="66.0" layoutY="97.0" text="Conta Origem">
+      <Label layoutX="67.0" layoutY="86.0" text="Conta Origem">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="labelContaDestino" layoutX="397.0" layoutY="97.0" text="Conta Destino" visible="false">
+      <Label fx:id="labelContaDestino" layoutX="398.0" layoutY="86.0" text="Conta Destino" visible="false">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
       <Button fx:id="btnExecutar" layoutX="34.0" layoutY="173.0" mnemonicParsing="false" onAction="#btnExecutarOnAction" styleClass="success" text="Executar" />
-      <Button layoutX="204.0" layoutY="31.0" mnemonicParsing="false" onAction="#btnNovaTransacaoOnAction" prefHeight="32.0" prefWidth="141.0" text="Nova Transação" />
+      <Button layoutX="204.0" layoutY="25.0" mnemonicParsing="false" onAction="#btnNovaTransacaoOnAction" prefHeight="32.0" prefWidth="141.0" text="Nova Transação" />
    </children>
 </AnchorPane>

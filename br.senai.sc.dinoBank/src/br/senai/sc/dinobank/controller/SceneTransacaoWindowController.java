@@ -74,6 +74,7 @@ public class SceneTransacaoWindowController implements Initializable {
     List<String> acoes = Arrays.asList("Depósíto", "Saque", "Transferência");
     
     
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -85,42 +86,7 @@ public class SceneTransacaoWindowController implements Initializable {
             alerta.alertaDeErro(ex.getMessage());
         }
         
-        tblColumnData.setCellFactory((TableColumn<Transacao, String> param) -> {
-            TableCell cell = new TableCell<Transacao, String>() {
-
-                @Override
-                public void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setText(null);
-                    setGraphic(null);
-                    if (!empty) {
-                        if (item == null || item.isEmpty()) {
-                            setText("");
-                        } else {
-                            String dataString = "";
-                            List<String> aux = Arrays.asList(item.split("-"));
-                            dataString = dataString.concat(aux.get(2));
-                            dataString = dataString.concat("/");
-                            dataString = dataString.concat(aux.get(1));
-                            dataString = dataString.concat("/");
-                            dataString = dataString.concat(aux.get(0));
-                            setText(dataString);
-                        }
-
-                    }
-                }
-
-                @Override
-                public void updateSelected(boolean upd) {
-                    super.updateSelected(upd);
-                }
-
-                private String getString() {
-                    return getItem() == null ? "" : getItem().toString();
-                }
-            };
-            return cell;
-        });
+        columnDateMask();
         
         /*tblTransacoes.getSelectionModel().selectedItemProperty().addListener((observable,oldValue,newValue)->{
             unbindFields(oldValue);
@@ -252,6 +218,45 @@ public class SceneTransacaoWindowController implements Initializable {
         SimpleDateFormat dataFormat = new SimpleDateFormat("dd/MM/yyyy");
         data = dataFormat.format(date);
         return data;
+    }
+    
+    private void columnDateMask(){
+        tblColumnData.setCellFactory((TableColumn<Transacao, String> param) -> {
+            TableCell cell = new TableCell<Transacao, String>() {
+
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+                    if (!empty) {
+                        if (item == null || item.isEmpty()) {
+                            setText("");
+                        } else {
+                            String dataString = "";
+                            List<String> aux = Arrays.asList(item.split("-"));
+                            dataString = dataString.concat(aux.get(2));
+                            dataString = dataString.concat("/");
+                            dataString = dataString.concat(aux.get(1));
+                            dataString = dataString.concat("/");
+                            dataString = dataString.concat(aux.get(0));
+                            setText(dataString);
+                        }
+
+                    }
+                }
+
+                @Override
+                public void updateSelected(boolean upd) {
+                    super.updateSelected(upd);
+                }
+
+                private String getString() {
+                    return getItem() == null ? "" : getItem().toString();
+                }
+            };
+            return cell;
+        });
     }
     
     private void limparFields(){

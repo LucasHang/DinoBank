@@ -26,9 +26,8 @@ public class Transacao {
     private final DoubleProperty valor = new SimpleDoubleProperty();
     private final StringProperty data = new SimpleStringProperty();
     private final IntegerProperty codigo = new SimpleIntegerProperty();
-   
-    
 
+    
     public Transacao(){
         
     }
@@ -40,10 +39,11 @@ public class Transacao {
         this.acao.set(acao);
         this.valor.set(valor);
         this.data.set(data);
+
         
     }
     
-    
+
     public Integer getCodigo() {
         return this.codigo.get();
     }
